@@ -3,7 +3,14 @@
 </template>
 
 <style lang="scss">
+body {
+  font-size: 16px;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Raleway', Avenir, Helvetica, Arial, sans-serif;
+}
+a {
+  text-decoration: none;
+  color: #000;
 }
 </style>
