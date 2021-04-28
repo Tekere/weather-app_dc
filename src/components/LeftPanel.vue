@@ -18,7 +18,7 @@
     </div>
     <div class="bl_leftCont_weatherInfo">
       <div class="bl_leftCont_img_wrapper">
-        <img src="/images/Cloud-background.png" alt="" />
+        <img src="" alt="" />
       </div>
       <div class="bl_leftCont_temperature"></div>
       <div class="bl_leftCont_weatherTxt"></div>

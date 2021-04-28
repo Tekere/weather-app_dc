@@ -22,7 +22,7 @@ export default defineComponent({
   },
   data() {
     return {
-      isOpenSidebar: false,
+      isOpenSidebar: true,
     }
   },
 })
