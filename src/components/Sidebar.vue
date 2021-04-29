@@ -20,7 +20,7 @@ export default defineComponent({
       )
       axios
         .get(
-          'https://hidden-sea-76385.herokuapp.com//https://www.metaweather.com/api/location/search/?query=san'
+          'https://ancient-inlet-04652.herokuapp.com/https://www.metaweather.com/api/location/search/?query=san'
         )
         .then((res) => {
           console.log(res)

@@ -18,14 +18,22 @@
     </div>
     <div class="bl_leftCont_weatherInfo">
       <div class="bl_leftCont_img_wrapper">
-        <img src="" alt="" />
+        <img src="/images/clear.png" alt="" />
       </div>
-      <div class="bl_leftCont_temperature"></div>
-      <div class="bl_leftCont_weatherTxt"></div>
+      <div class="bl_leftCont_temperature">
+        <p>15<span>℃</span></p>
+      </div>
+      <div class="bl_leftCont_weatherTxt">
+        <p>Shower</p>
+      </div>
     </div>
     <div class="bl_leftCont_subInfo">
-      <div class="bl_leftCont_date"></div>
-      <div class="bl_leftCont_place"></div>
+      <div class="bl_leftCont_date">
+        <p>Today Fri, 5 Jun</p>
+      </div>
+      <div class="bl_leftCont_place">
+        <p>Helsinki</p>
+      </div>
     </div>
   </div>
 </template>
@@ -43,7 +51,7 @@ export default defineComponent({})
   color: #fff;
 }
 .bl_leftCont_btn_unit {
-  padding: 2rem;
+  padding: 2rem 1.5rem;
 }
 .el_search_btn {
   display: inline-block;
@@ -69,10 +77,58 @@ export default defineComponent({})
   }
 }
 .bl_leftCont_weatherInfo {
+  padding-bottom: 10%;
   .bl_leftCont_img_wrapper {
-    height: 100px;
-    width: 100%;
-    background-image: url('/images/Cloud-background.png');
+    position: relative;
+    height: 40vh;
+    &::before {
+      content: '';
+      position: absolute;
+      // display: block;
+      height: 40vh;
+      width: 100%;
+      background: url('/images/cloud_background.png') no-repeat center
+        center/cover;
+      opacity: 0.1;
+    }
+    img {
+      width: 30%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+  .bl_leftCont_temperature {
+    padding-bottom: 20%;
+    font-size: 6rem;
+    text-align: center;
+    span {
+      display: inline-block;
+      font-size: 4.5rem;
+      color: #a09fb1;
+    }
+  }
+  .bl_leftCont_weatherTxt {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #a09fb1;
+    text-align: center;
+  }
+}
+.bl_leftCont_subInfo {
+  .bl_leftCont_date {
+    padding-bottom: 10%;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #a09fb1;
+    text-align: center;
+  }
+  .bl_leftCont_place {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #a09fb1;
+    text-align: center;
   }
 }
 </style>

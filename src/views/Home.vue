@@ -22,7 +22,7 @@ export default defineComponent({
   },
   data() {
     return {
-      isOpenSidebar: true,
+      isOpenSidebar: false,
     }
   },
 })
@@ -30,6 +30,9 @@ export default defineComponent({
 <style lang="scss">
 .ly_left {
   height: 100vh;
-  width: 30%;
+  width: 27%;
+}
+.ly_right {
+  overflow-y: auto;
 }
 </style>
