@@ -29,7 +29,7 @@
     </div>
     <div class="bl_leftCont_subInfo">
       <div class="bl_leftCont_date">
-        <p>Today Fri, 5 Jun</p>
+        <p><span>Today</span> Fri, 5 Jun</p>
       </div>
       <div class="bl_leftCont_place">
         <p>Helsinki</p>
