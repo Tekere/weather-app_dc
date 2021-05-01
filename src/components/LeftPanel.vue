@@ -1,7 +1,9 @@
 <template>
   <div class="bl_leftCont">
     <div class="bl_leftCont_btn_unit">
-      <a href="" class="el_search_btn">Search for places</a>
+      <a @click.prevent="toggleIsOpenSidebar" href="" class="el_search_btn"
+        >Search for places</a
+      >
       <a href="" class="el_currentLocation"
         ><svg
           enable-background="new 0 0 24 24"
@@ -40,8 +42,13 @@
 
 <script>
 import { defineComponent } from 'vue'
+import { mapActions } from 'vuex'
 
-export default defineComponent({})
+export default defineComponent({
+  methods: {
+    ...mapActions(['toggleIsOpenSidebar']),
+  },
+})
 </script>
 
 <style lang="scss">
@@ -51,7 +58,7 @@ export default defineComponent({})
   color: #fff;
 }
 .bl_leftCont_btn_unit {
-  padding: 2rem 1.5rem;
+  padding: 2rem 1rem;
 }
 .el_search_btn {
   display: inline-block;
@@ -81,15 +88,24 @@ export default defineComponent({})
   .bl_leftCont_img_wrapper {
     position: relative;
     height: 40vh;
+    @media (max-width: 1200px) {
+      & {
+        height: 30vh;
+      }
+    }
     &::before {
       content: '';
       position: absolute;
-      // display: block;
       height: 40vh;
       width: 100%;
       background: url('/images/cloud_background.png') no-repeat center
         center/cover;
       opacity: 0.1;
+      @media (max-width: 1200px) {
+        & {
+          height: 30vh;
+        }
+      }
     }
     img {
       width: 30%;
