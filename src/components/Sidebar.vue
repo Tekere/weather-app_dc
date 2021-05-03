@@ -1,14 +1,33 @@
 <template>
   <div class="bl_sidebar">
     <div class="bl_sidebar_exit">
-      <button @click="toggleIsOpenSidebar">X</button>
+      <button @click="toggleIsOpenSidebar">×</button>
     </div>
     <!-- <button @click="searchLocation('tokyo')">tokyo</button> -->
     <div class="bl_sidebar_search_wrapper">
-      <input type="text" />
-      <input type="submit" />
+      <input v-model="searchTxt" type="text" placeholder="search location" />
+      <input
+        @click.prevent="searchLocation(searchTxt)"
+        type="button"
+        value="search"
+      />
     </div>
-    <div class="bl_sidebar_registeredTown"></div>
+    <div v-if="searchTxt.length > 0" class="bl_sidebar_searchResult">
+      <ul class="bl_sidebar_searchResult_list">
+        <li
+          v-for="resultItem in searchResult"
+          :key="resultItem.woeid"
+          class="bl_sidebar_searchResult_item"
+        >
+          <a href="">{{ resultItem.title }}</a>
+        </li>
+      </ul>
+    </div>
+    <div class="bl_sidebar_registeredTown">
+      <ul class="bl_sidebar_registeredTown_list">
+        <li class="bl_sidebar_registeredTown_item">Tokyo</li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -20,21 +39,32 @@ import axios from 'axios'
 export default defineComponent({
   name: 'sidebar',
   data() {
-    return {}
+    return {
+      searchTxt: '',
+      searchResult: [],
+      gotData: false,
+    }
+  },
+  watch: {
+    searchTxt(val) {
+      if (val.length === 0) {
+        this.searchResult = []
+      }
+    },
   },
   methods: {
     ...mapActions(['toggleIsOpenSidebar']),
     searchLocation(location: string): void {
-      console.log(
-        'https://www.metaweather.com/api/location/search/?query=' + location
-      )
-      axios
-        .get(
-          'https://ancient-inlet-04652.herokuapp.com/https://www.metaweather.com/api/location/search/?query=san'
-        )
-        .then((res) => {
-          console.log(res)
-        })
+      if (location.length > 0) {
+        axios
+          .get(
+            'https://ancient-inlet-04652.herokuapp.com/https://www.metaweather.com/api/location/search/?query=' +
+              location
+          )
+          .then((res) => {
+            this.searchResult = res.data
+          })
+      }
     },
   },
 })
@@ -45,5 +75,63 @@ export default defineComponent({
   height: 100%;
   background-color: #1e213a;
   color: #fff;
+}
+.bl_sidebar_exit {
+  padding: 2rem 1.5rem 0;
+  text-align: right;
+  button {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+  }
+}
+.bl_sidebar_search_wrapper {
+  padding: 2rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  input[type='text'] {
+    padding: 0.5rem;
+    width: 60%;
+    background-color: transparent;
+    border: 1px solid #e7e7eb;
+    color: #fff;
+    &:focus {
+      outline: 0;
+    }
+  }
+  input[type='button'] {
+    width: 25%;
+    padding: 0.5rem;
+    background-color: #3c47e9;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+}
+.bl_sidebar_registeredTown {
+  padding: 1rem 1.5rem;
+}
+.bl_sidebar_registeredTown_item {
+  padding: 1rem;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+  &:hover {
+    border: 1px solid #fff;
+  }
+}
+.bl_sidebar_searchResult {
+  .bl_sidebar_searchResult_list {
+    padding: 1rem 1.5rem;
+    height: 75vh;
+    overflow-y: auto;
+  }
+  .bl_sidebar_searchResult_item {
+    padding: 1rem;
+    a {
+      color: #fff;
+    }
+  }
 }
 </style>
