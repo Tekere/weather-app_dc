@@ -23,10 +23,10 @@
         <img src="/images/clear.png" alt="" />
       </div>
       <div class="bl_leftCont_temperature">
-        <p>15<span>℃</span></p>
+        <p>{{ formatTemp(todayWeather.the_temp) }}<span>℃</span></p>
       </div>
       <div class="bl_leftCont_weatherTxt">
-        <p>Shower</p>
+        <p>{{ todayWeather.weather_state_name }}</p>
       </div>
     </div>
     <div class="bl_leftCont_subInfo">
@@ -45,8 +45,12 @@ import { defineComponent } from 'vue'
 import { mapActions } from 'vuex'
 
 export default defineComponent({
+  props: ['todayWeather'],
   methods: {
     ...mapActions(['toggleIsOpenSidebar']),
+    formatTemp(temp) {
+      return Math.floor(temp)
+    },
   },
 })
 </script>

@@ -1,76 +1,38 @@
 <template>
   <div class="home ly_page">
     <div class="ly_left">
-      <transition name="fade" mode="out-in">
+      <transition name="" mode="">
         <sidebar v-if="isOpenSidebar"></sidebar>
-        <left-panel v-else></left-panel>
+        <left-panel v-else :today-weather="weekWeather[0]"></left-panel>
       </transition>
     </div>
     <div class="ly_right">
       <div class="bl_rightCont">
         <div class="bl_card_unit .bl_card_unit__s bl_card_unit__mb">
-          <div class="bl_card bl_card__s">
+          <div
+            v-for="weather in weekWeather"
+            :key="weather.id"
+            class="bl_card bl_card__s"
+          >
             <div class="bl_card_head">
-              <p>Tomorrow</p>
+              <p>{{ formatApplicableDate(weather.applicable_date) }}</p>
             </div>
             <div class="bl_card_main">
-              <img src="/images/clear.png" alt="" />
+              <img
+                :src="
+                  '/images/' +
+                  weather.weather_state_name.replace(/\s+/g, '') +
+                  '.png'
+                "
+                alt=""
+              />
             </div>
             <div class="bl_card_info">
-              <p>16</p>
-              <p>11℃</p>
-            </div>
-          </div>
-          <div class="bl_card bl_card__s">
-            <div class="bl_card_head">
-              <p>Tomorrow</p>
-            </div>
-            <div class="bl_card_main">
-              <img src="/images/clear.png" alt="" />
-            </div>
-            <div class="bl_card_info">
-              <p>16</p>
-              <p>11℃</p>
-            </div>
-          </div>
-          <div class="bl_card bl_card__s">
-            <div class="bl_card_head">
-              <p>Tomorrow</p>
-            </div>
-            <div class="bl_card_main">
-              <img src="/images/clear.png" alt="" />
-            </div>
-            <div class="bl_card_info">
-              <p>16</p>
-              <p>11℃</p>
-            </div>
-          </div>
-          <div class="bl_card bl_card__s">
-            <div class="bl_card_head">
-              <p>Tomorrow</p>
-            </div>
-            <div class="bl_card_main">
-              <img src="/images/clear.png" alt="" />
-            </div>
-            <div class="bl_card_info">
-              <p>16</p>
-              <p>11℃</p>
-            </div>
-          </div>
-          <div class="bl_card bl_card__s">
-            <div class="bl_card_head">
-              <p>Tomorrow</p>
-            </div>
-            <div class="bl_card_main">
-              <img src="/images/clear.png" alt="" />
-            </div>
-            <div class="bl_card_info">
-              <p>16</p>
-              <p>11℃</p>
+              <p>{{ formatTemp(weather.max_temp) }}℃</p>
+              <p>{{ formatTemp(weather.min_temp) }}℃</p>
             </div>
           </div>
         </div>
-
         <div class="bl_ttl">
           <h2>Today’s Highlights</h2>
         </div>
@@ -117,6 +79,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import axios from 'axios'
+import moment from 'moment'
 import { mapGetters, mapActions } from 'vuex'
 import Sidebar from '@/components/Sidebar.vue'
 import LeftPanel from '@/components/LeftPanel.vue'
@@ -127,13 +91,35 @@ export default defineComponent({
     LeftPanel,
   },
   data() {
-    return {}
+    return {
+      weekWeather: [],
+    }
   },
   computed: {
     ...mapGetters(['isOpenSidebar']),
   },
+  created() {
+    this.getWeather()
+  },
   methods: {
     ...mapActions(['toggleIsOpenSidebar']),
+    getWeather(targetLocation = '1118370') {
+      axios
+        .get(
+          'https://ancient-inlet-04652.herokuapp.com/https://www.metaweather.com/api/location/' +
+            targetLocation
+        )
+        .then((res) => {
+          this.weekWeather = res.data.consolidated_weather
+          console.log(this.weekWeather)
+        })
+    },
+    formatApplicableDate(date) {
+      return moment(date).format('M月D日')
+    },
+    formatTemp(temp) {
+      return Math.floor(temp)
+    },
   },
 })
 </script>
@@ -204,6 +190,9 @@ export default defineComponent({
   &:last-child {
     margin-right: 0;
   }
+  .bl_card_main {
+    height: 40%;
+  }
 }
 .bl_card__l {
   width: 48%;
@@ -217,17 +206,6 @@ export default defineComponent({
     color: #fff;
     font-weight: bold;
   }
-}
-.fade-enter-active {
-  transition: all 1s;
-}
-.fade-enter-to,
-.fade-leave {
-  transform: translateX(0);
-}
-.fade-enter,
-.fade-leave-to {
-  transform: translateX(-100%);
 }
 
 @media (max-width: 1100px) {
