@@ -2,8 +2,12 @@
   <div class="home ly_page">
     <div class="ly_left">
       <transition name="" mode="">
-        <sidebar v-if="isOpenSidebar"></sidebar>
-        <left-panel v-else :today-weather="weekWeather[0]"></left-panel>
+        <sidebar v-if="isOpenSidebar" @click-city="selectCity"></sidebar>
+        <left-panel
+          v-else
+          :today-weather="weekWeather[0]"
+          :city-name="cityName"
+        ></left-panel>
       </transition>
     </div>
     <div class="ly_right">
@@ -93,6 +97,7 @@ export default defineComponent({
   data() {
     return {
       weekWeather: [],
+      cityName: 'Tokyo',
     }
   },
   computed: {
@@ -119,6 +124,10 @@ export default defineComponent({
     },
     formatTemp(temp) {
       return Math.floor(temp)
+    },
+    selectCity({ title, woeid }) {
+      this.getWeather(woeid)
+      this.cityName = title
     },
   },
 })

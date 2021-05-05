@@ -19,7 +19,9 @@
           :key="resultItem.woeid"
           class="bl_sidebar_searchResult_item"
         >
-          <a href="">{{ resultItem.title }}</a>
+          <a @click.prevent="clickCity(resultItem)" href="">{{
+            resultItem.title
+          }}</a>
         </li>
       </ul>
     </div>
@@ -65,6 +67,9 @@ export default defineComponent({
             this.searchResult = res.data
           })
       }
+    },
+    clickCity(city) {
+      this.$emit('click-city', city)
     },
   },
 })
@@ -128,8 +133,9 @@ export default defineComponent({
     overflow-y: auto;
   }
   .bl_sidebar_searchResult_item {
-    padding: 1rem;
     a {
+      display: block;
+      padding: 1rem;
       color: #fff;
     }
   }
