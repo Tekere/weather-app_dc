@@ -1,12 +1,14 @@
 <template>
-  <div class="home ly_page">
+  <div v-if="isLoading" class="bl_loading"><p>Loading...</p></div>
+  <div v-else class="home ly_page">
     <div class="ly_left">
       <transition name="" mode="">
         <sidebar v-if="isOpenSidebar" @click-city="selectCity"></sidebar>
         <left-panel
           v-else
-          :today-weather="weekWeather[0]"
+          :today-weather="todayWeather"
           :city-name="cityName"
+          :today="today"
         ></left-panel>
       </transition>
     </div>
@@ -32,8 +34,8 @@
               />
             </div>
             <div class="bl_card_info">
-              <p>{{ formatTemp(weather.max_temp) }}℃</p>
-              <p>{{ formatTemp(weather.min_temp) }}℃</p>
+              <p>{{ formatToInteger(weather.max_temp) }}℃</p>
+              <p>{{ formatToInteger(weather.min_temp) }}℃</p>
             </div>
           </div>
         </div>
@@ -43,10 +45,12 @@
         <div class="bl_card_unit bl_card_unit__wrap">
           <div class="bl_card bl_card__l">
             <div class="bl_card_head">
-              <p>Wind status</p>
+              <p>Wind speed</p>
             </div>
             <div class="bl_card_main">
-              <p>7<small>mph</small></p>
+              <p>
+                {{ formatToInteger(todayWeather.wind_speed) }}<small>mph</small>
+              </p>
             </div>
             <div class="bl_card_info"></div>
           </div>
@@ -55,16 +59,19 @@
               <p>Humidity</p>
             </div>
             <div class="bl_card_main">
-              <p>84<small>%</small></p>
+              <p>{{ todayWeather.humidity }}<small>%</small></p>
             </div>
             <div class="bl_card_info"></div>
           </div>
           <div class="bl_card bl_card__l">
             <div class="bl_card_head">
-              <p>Wind status</p>
+              <p>visibility</p>
             </div>
             <div class="bl_card_main">
-              <p>6.5<small>miles</small></p>
+              <p>
+                {{ formatToInteger(todayWeather.visibility)
+                }}<small>miles</small>
+              </p>
             </div>
           </div>
           <div class="bl_card bl_card__l">
@@ -72,7 +79,7 @@
               <p>Air Pressure</p>
             </div>
             <div class="bl_card_main">
-              <p>998<small>mb</small></p>
+              <p>{{ todayWeather.air_pressure }}<small>mb</small></p>
             </div>
           </div>
         </div>
@@ -88,6 +95,8 @@ import moment from 'moment'
 import { mapGetters, mapActions } from 'vuex'
 import Sidebar from '@/components/Sidebar.vue'
 import LeftPanel from '@/components/LeftPanel.vue'
+
+let today = moment().format('ddd, D MMMM')
 export default defineComponent({
   name: 'Home',
   components: {
@@ -96,19 +105,25 @@ export default defineComponent({
   },
   data() {
     return {
+      isLoading: true,
       weekWeather: [],
       cityName: 'Tokyo',
+      today,
     }
   },
   computed: {
     ...mapGetters(['isOpenSidebar']),
+    todayWeather() {
+      return this.weekWeather[0]
+    },
   },
   created() {
     this.getWeather()
   },
   methods: {
     ...mapActions(['toggleIsOpenSidebar']),
-    getWeather(targetLocation = '1118370') {
+    getWeather(targetLocation = '1118370'): void {
+      this.isLoading = true
       axios
         .get(
           'https://ancient-inlet-04652.herokuapp.com/https://www.metaweather.com/api/location/' +
@@ -118,14 +133,17 @@ export default defineComponent({
           this.weekWeather = res.data.consolidated_weather
           console.log(this.weekWeather)
         })
+        .then(() => {
+          this.isLoading = false
+        })
     },
-    formatApplicableDate(date) {
+    formatApplicableDate(date: string): string {
       return moment(date).format('M月D日')
     },
-    formatTemp(temp) {
+    formatToInteger(temp: number): number {
       return Math.floor(temp)
     },
-    selectCity({ title, woeid }) {
+    selectCity({ title, woeid }): void {
       this.getWeather(woeid)
       this.cityName = title
     },
@@ -242,6 +260,19 @@ export default defineComponent({
     h2 {
       font-size: 20px;
     }
+  }
+}
+.bl_loading {
+  background-color: #100e1d;
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  p {
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }
 </style>

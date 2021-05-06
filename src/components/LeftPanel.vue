@@ -31,7 +31,7 @@
     </div>
     <div class="bl_leftCont_subInfo">
       <div class="bl_leftCont_date">
-        <p><span>Today</span> Fri, 5 Jun</p>
+        <p><span>Today</span> {{ today }}</p>
       </div>
       <div class="bl_leftCont_place">
         <p>{{ cityName }}</p>
@@ -45,7 +45,7 @@ import { defineComponent } from 'vue'
 import { mapActions } from 'vuex'
 
 export default defineComponent({
-  props: ['todayWeather', 'cityName'],
+  props: ['todayWeather', 'cityName', 'today'],
   methods: {
     ...mapActions(['toggleIsOpenSidebar']),
     formatTemp(temp) {
