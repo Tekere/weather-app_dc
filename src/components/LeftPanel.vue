@@ -55,7 +55,6 @@ export default defineComponent({
       return Math.floor(temp)
     },
     clickCurrentLocation(): void {
-      this.toggleIsOpenSidebar()
       this.$emit('click-current-location')
     },
   },

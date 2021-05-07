@@ -6,15 +6,14 @@
         <sidebar
           v-if="isOpenSidebar"
           @click-city="selectCity"
-          ref="sidebar"
+          ref="side"
         ></sidebar>
         <left-panel
           v-else
           :today-weather="todayWeather"
           :city-name="cityName"
           :today="today"
-          @click-current-location="searchLocationByCoordinates"
-          ref="left-panel"
+          @click-current-location="getLocationCoordinates"
         ></left-panel>
       </transition>
     </div>
@@ -148,7 +147,6 @@ export default defineComponent({
         )
         .then((res) => {
           this.weekWeather = res.data.consolidated_weather
-          console.log(this.weekWeather)
         })
         .then(() => {
           this.isLoading = false
@@ -164,9 +162,28 @@ export default defineComponent({
       this.getWeather(woeid)
       this.cityName = title
     },
-    searchLocationByCoordinates(): void {
-      console.log(this.$refs.sidebar[0])
-      // this.$refs.sidebar.searchLocationByCoordinates()
+    getLocationCoordinates(): void {
+      this.isLoading = true
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude //緯度を取得して定数latに代入
+          const lng = pos.coords.longitude //経度を取得して定数lngに代入
+          axios
+            .get(
+              'https://ancient-inlet-04652.herokuapp.com/https://www.metaweather.com/api/location/search/?lattlong=' +
+                lat +
+                ',' +
+                lng
+            )
+            .then((res) => {
+              this.getWeather(res.data[0].woeid)
+              this.cityName = res.data[0].title
+            })
+        },
+        () => {
+          console.log('error')
+        }
+      )
     },
   },
 })

@@ -3,7 +3,7 @@
     <div class="bl_sidebar_exit">
       <button @click="toggleIsOpenSidebar">×</button>
     </div>
-    <!-- <button @click="searchLocation('tokyo')">tokyo</button> -->
+
     <div class="bl_sidebar_search_wrapper">
       <input v-model="searchTxt" type="text" placeholder="search location" />
       <input
@@ -12,6 +12,7 @@
         value="search"
       />
     </div>
+
     <div v-if="searchTxt.length > 0" class="bl_sidebar_searchResult">
       <ul class="bl_sidebar_searchResult_list">
         <li
@@ -68,29 +69,7 @@ export default defineComponent({
           })
       }
     },
-    searchLocationByCoordinates(coordinates: { y: string; x: string }): void {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const lat = pos.coords.latitude //緯度を取得して定数latに代入
-          const lng = pos.coords.longitude //経度を取得して定数lngに代入
-          const accuracy = pos.coords.accuracy
-          console.log(`緯度：${lat} 経度：${lng} 精度：${accuracy}`)
-        },
-        () => {
-          console.log('error')
-        }
-      )
-      // axios
-      //   .get(
-      //     'https://www.metaweather.com/api/location/search/?lattlong=' +
-      //       coordinates.y +
-      //       ',' +
-      //       coordinates.x
-      //   )
-      //   .then((res) => {
-      //     this.searchResult = res.data
-      //   })
-    },
+
     clickCity(city) {
       this.$emit('click-city', city)
     },
