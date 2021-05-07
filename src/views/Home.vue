@@ -3,12 +3,18 @@
   <div v-else class="home ly_page">
     <div class="ly_left">
       <transition name="" mode="">
-        <sidebar v-if="isOpenSidebar" @click-city="selectCity"></sidebar>
+        <sidebar
+          v-if="isOpenSidebar"
+          @click-city="selectCity"
+          ref="sidebar"
+        ></sidebar>
         <left-panel
           v-else
           :today-weather="todayWeather"
           :city-name="cityName"
           :today="today"
+          @click-current-location="searchLocationByCoordinates"
+          ref="left-panel"
         ></left-panel>
       </transition>
     </div>
@@ -79,7 +85,10 @@
               <p>Air Pressure</p>
             </div>
             <div class="bl_card_main">
-              <p>{{ todayWeather.air_pressure }}<small>mb</small></p>
+              <p>
+                {{ formatToInteger(todayWeather.air_pressure)
+                }}<small>mb</small>
+              </p>
             </div>
           </div>
         </div>
@@ -96,7 +105,15 @@ import { mapGetters, mapActions } from 'vuex'
 import Sidebar from '@/components/Sidebar.vue'
 import LeftPanel from '@/components/LeftPanel.vue'
 
-let today = moment().format('ddd, D MMMM')
+const today = moment().format('ddd, D MMMM')
+
+// interface
+interface Data {
+  isLoading: boolean
+  weekWeather: any[]
+  cityName: string
+  today: string
+}
 export default defineComponent({
   name: 'Home',
   components: {
@@ -109,11 +126,11 @@ export default defineComponent({
       weekWeather: [],
       cityName: 'Tokyo',
       today,
-    }
+    } as Data
   },
   computed: {
     ...mapGetters(['isOpenSidebar']),
-    todayWeather() {
+    todayWeather(): any {
       return this.weekWeather[0]
     },
   },
@@ -146,6 +163,10 @@ export default defineComponent({
     selectCity({ title, woeid }): void {
       this.getWeather(woeid)
       this.cityName = title
+    },
+    searchLocationByCoordinates(): void {
+      console.log(this.$refs.sidebar[0])
+      // this.$refs.sidebar.searchLocationByCoordinates()
     },
   },
 })

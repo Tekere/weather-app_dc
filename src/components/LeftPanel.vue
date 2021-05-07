@@ -4,7 +4,10 @@
       <a @click.prevent="toggleIsOpenSidebar" href="" class="el_search_btn"
         >Search for places</a
       >
-      <a href="" class="el_currentLocation"
+      <a
+        @click.prevent="clickCurrentLocation"
+        href=""
+        class="el_currentLocation"
         ><svg
           enable-background="new 0 0 24 24"
           height="20"
@@ -40,7 +43,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue'
 import { mapActions } from 'vuex'
 
@@ -48,8 +51,12 @@ export default defineComponent({
   props: ['todayWeather', 'cityName', 'today'],
   methods: {
     ...mapActions(['toggleIsOpenSidebar']),
-    formatTemp(temp) {
+    formatTemp(temp: number): number {
       return Math.floor(temp)
+    },
+    clickCurrentLocation(): void {
+      this.toggleIsOpenSidebar()
+      this.$emit('click-current-location')
     },
   },
 })
