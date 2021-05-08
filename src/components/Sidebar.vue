@@ -26,11 +26,6 @@
         </li>
       </ul>
     </div>
-    <div class="bl_sidebar_registeredTown">
-      <ul class="bl_sidebar_registeredTown_list">
-        <li class="bl_sidebar_registeredTown_item">Tokyo</li>
-      </ul>
-    </div>
   </div>
 </template>
 
@@ -117,17 +112,7 @@ export default defineComponent({
     cursor: pointer;
   }
 }
-.bl_sidebar_registeredTown {
-  padding: 1rem 1.5rem;
-}
-.bl_sidebar_registeredTown_item {
-  padding: 1rem;
-  border: 1px solid transparent;
-  transition: all 0.2s;
-  &:hover {
-    border: 1px solid #fff;
-  }
-}
+
 .bl_sidebar_searchResult {
   .bl_sidebar_searchResult_list {
     padding: 1rem 1.5rem;
@@ -139,6 +124,10 @@ export default defineComponent({
       display: block;
       padding: 1rem;
       color: #fff;
+      border: 1px solid transparent;
+      &:hover {
+        border: 1px solid #fff;
+      }
     }
   }
 }

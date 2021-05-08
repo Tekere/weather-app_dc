@@ -161,6 +161,7 @@ export default defineComponent({
     selectCity({ title, woeid }): void {
       this.getWeather(woeid)
       this.cityName = title
+      this.toggleIsOpenSidebar()
     },
     getLocationCoordinates(): void {
       this.isLoading = true
