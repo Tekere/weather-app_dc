@@ -34,6 +34,12 @@ import { defineComponent } from 'vue'
 import { mapActions } from 'vuex'
 import axios from 'axios'
 
+// interface
+interface Data {
+  searchTxt:string
+  searchResult:any[]
+  gotData:boolean
+}
 export default defineComponent({
   name: 'sidebar',
   data() {
@@ -41,7 +47,7 @@ export default defineComponent({
       searchTxt: '',
       searchResult: [],
       gotData: false,
-    }
+    } as Data
   },
   watch: {
     searchTxt(val) {
@@ -65,7 +71,7 @@ export default defineComponent({
       }
     },
 
-    clickCity(city) {
+    clickCity(city) :void{
       this.$emit('click-city', city)
     },
   },
